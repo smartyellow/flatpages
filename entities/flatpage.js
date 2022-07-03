@@ -323,7 +323,7 @@ module.exports = {
       validate: async ({ newValues, oldValues, newEntity, storage }) => {
         if (newEntity) {
           // For new records, any value is ok
-          const r = storage ? await storage.store('objects').get(newValues.id) : null;
+          const r = storage ? await storage.store('smartyellow/flatpage').get(newValues.id) : null;
           return (r == null ? true : 'id already exists');
         }
         else {

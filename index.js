@@ -85,7 +85,7 @@ module.exports = {
       method: 'get',
       requires: [ 'smartyellow/flatpages/seeMyFlatpages', 'smartyellow/flatpages/seeAllFlatpages' ],
       handler: async (req, res, user) => {
-        const q = server.storage({ user }).store('flatpages').find().sort({ 'log.created.on': -1 });
+        const q = server.storage({ user }).store('smartyellow/flatpage').find().sort({ 'log.created.on': -1 });
         const result = await (req.headers['format'] == 'object' ? q.toObject() : q.toArray());
         res.json(result);
       },
@@ -190,10 +190,10 @@ module.exports = {
       requires: 'smartyellow/flatpages/deleteFlatpages',
       handler: async (req, res, user) => {
         // Check if user is allowed to see flatpage to be deleted
-        const flatpages = await server.storage({ user }).store('flatpages').find().toObject();
+        const flatpages = await server.storage({ user }).store('smartyellow/flatpage').find().toObject();
         if (flatpages[req.params[0]]) {
           // User is allowed to see the flatpage to be deleted, continue
-          await server.storage({ user }).store('flatpages').delete({ id: req.params[0] });
+          await server.storage({ user }).store('smartyellow/flatpage').delete({ id: req.params[0] });
           // broadcast reload trigger
           server.publish('cms', 'smartyellow/flatpages/reload');
         }
@@ -239,7 +239,7 @@ module.exports = {
           user: user,
         });
         const storageQuery = server.storage({ user }).prepareQuery(filters, query, req.body.languages || false);
-        const find = server.storage({ user }).store('flatpages').find(storageQuery);
+        const find = server.storage({ user }).store('smartyellow/flatpage').find(storageQuery);
         const result = await (req.headers['format'] == 'object' ? find.toObject() : find.toArray());
         res.json(result);
       },
